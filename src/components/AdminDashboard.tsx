@@ -37,10 +37,10 @@ const AdminDashboard: React.FC = () => {
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
                         <ZaitounibioLogo
-                            height={150}
-                            responsive={true}
-                            withGlow={true}
-                            inverted={true}
+                        height={150}
+                        responsive={true}
+                        withGlow={true}
+                        inverted={true}
                         />
                     </div>
                     <h1 style={{

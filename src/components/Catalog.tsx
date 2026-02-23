@@ -18,12 +18,11 @@ interface Category {
     description_fr: string;
     description_ar: string;
     image: string;
-}
+}   
 
 interface CatalogProps {
-    onOrder: (product: any, weight?: string, quantity?: number) => void;
+onOrder: (product: any, weight?: string, quantity?: number) => void;
 }
-const API = import.meta.env.VITE_API_URL;
 const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
 
     const [searchParams, setSearchParams] = useSearchParams();
