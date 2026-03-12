@@ -61,7 +61,7 @@ const Hero: React.FC = () => {
                     }}
                 >
                     <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)' }} />
-                    Premium & 100% Organique
+                    Premium, Naturel & 100% Bio
                 </motion.div>
 
                 <h1 style={{
@@ -98,7 +98,7 @@ const Hero: React.FC = () => {
                     lineHeight: 1.6,
                     textShadow: '0 2px 4px rgba(0,0,0,0.2)'
                 }}>
-                    Découvrez une sélection d'exception de miel pur et d'huile ,
+                    Découvrez une sélection d'exception de miel pur, huiles et cosmétiques bio,
                     récoltés avec respect au cœur des terroirs les plus préservés.
                 </p>
 

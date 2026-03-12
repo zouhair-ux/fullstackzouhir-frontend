@@ -315,7 +315,7 @@ const About: React.FC = () => {
                     >
                         <Users size={60} className="text-primary" style={{ marginBottom: '2rem' }} />
                         <h2 style={{ fontSize: '3rem', color: 'var(--secondary)', marginBottom: '2rem', fontFamily: 'var(--font-heading)' }}>
-                            Rejoignez l'Aventure Zaitounibio
+                            Rejoignez l'Aventure Zaitouni Bio
                         </h2>
                         <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', lineHeight: 1.8, marginBottom: '3rem' }}>
                             Nos produits sont bien plus que de la nourriture. Ils sont le reflet d'une culture, d'un terroir et d'un engagement pour une vie plus saine.

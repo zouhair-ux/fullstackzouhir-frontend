@@ -18,10 +18,10 @@ interface Category {
     description_fr: string;
     description_ar: string;
     image: string;
-}   
+}
 
 interface CatalogProps {
-onOrder: (product: any, weight?: string, quantity?: number) => void;
+    onOrder: (product: any, weight?: string, quantity?: number) => void;
 }
 const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
 
@@ -115,7 +115,7 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
                             display: 'block',
                             marginBottom: '1rem'
                         }}>
-                            Zaitounibio - متجر
+                            Zaitouni Bio - متجر
                         </span>
 
                         {categoryId && selectedCategory ? (

@@ -115,7 +115,7 @@ const Footer: React.FC = () => {
                 </div>
 
                 <div style={{ textAlign: 'center', marginTop: '6rem', padding: '2rem 0 0 0', borderTop: '1px solid rgba(255,255,255,0.05)', opacity: 0.5, fontSize: '0.9rem' }}>
-                    <p>&copy; 2026 Zaitounibio. Cultivé avec Passion. Tous droits réservés.</p>
+                    <p>&copy; 2026 Zaitouni Bio. Cultivé avec Passion. Tous droits réservés.</p>
                 </div>
             </div>
 
