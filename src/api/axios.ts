@@ -4,7 +4,7 @@ import axios from 'axios';
 // Priority:
 // 1. Environment variable (Production)
 // 2. Localhost fallback (Development)
-const BASE_URL = "https://fullstackzouhir-backend-production-8fdd.up.railway.app/api";
+const BASE_URL = "https://fullstackzouhir-backend-production-1f8d.up.railway.app/api";
 
 console.log(`[API] Connecting to: ${BASE_URL}`);
 
