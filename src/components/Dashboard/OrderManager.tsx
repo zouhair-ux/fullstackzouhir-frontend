@@ -43,6 +43,16 @@ const OrderManager: React.FC = () => {
         }
     };
 
+    const deleteOrder = async (id: number) => {
+        if (!window.confirm('Voulez-vous vraiment supprimer cette commande ?')) return;
+        try {
+            await api.delete(`/orders/${id}/`);
+            setOrders(orders.filter(o => o.id !== id));
+        } catch (error) {
+            alert('Erreur lors de la suppression.');
+        }
+    };
+
     const getStatusInfo = (status: string) => {
         switch (status) {
             case 'PENDING': return { label: 'EN ATTENTE', color: '#f59e0b', bg: '#fffbeb', icon: <Clock size={14} /> };
@@ -154,8 +164,25 @@ const OrderManager: React.FC = () => {
                                         {status.icon}
                                         {status.label}
                                     </div>
-                                    <div style={{ textAlign: 'right' }}>
-                                        <div style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 900 }}>#{order.id}</div>
+                                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
+                                            <div style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 900 }}>#{order.id}</div>
+                                            <button
+                                                onClick={() => deleteOrder(order.id)}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    color: '#ef4444',
+                                                    cursor: 'pointer',
+                                                    padding: '2px',
+                                                    display: 'flex',
+                                                    alignItems: 'center'
+                                                }}
+                                                title="Supprimer la commande"
+                                            >
+                                                <XCircle size={16} />
+                                            </button>
+                                        </div>
                                         <div style={{ color: '#94a3b8', fontSize: '0.7rem', fontWeight: 600 }}>{new Date(order.created_at).toLocaleDateString('fr-FR')}</div>
                                     </div>
                                 </div>
