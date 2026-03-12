@@ -170,17 +170,30 @@ const OrderManager: React.FC = () => {
                                             <button
                                                 onClick={() => deleteOrder(order.id)}
                                                 style={{
-                                                    background: 'none',
-                                                    border: 'none',
+                                                    background: '#fee2e2',
+                                                    border: '1px solid #fecaca',
                                                     color: '#ef4444',
                                                     cursor: 'pointer',
-                                                    padding: '2px',
+                                                    padding: '0.3rem 0.6rem',
+                                                    borderRadius: '8px',
                                                     display: 'flex',
-                                                    alignItems: 'center'
+                                                    alignItems: 'center',
+                                                    gap: '0.3rem',
+                                                    fontSize: '0.65rem',
+                                                    fontWeight: 700,
+                                                    transition: 'all 0.2s'
+                                                }}
+                                                onMouseOver={(e) => {
+                                                    e.currentTarget.style.background = '#ef4444';
+                                                    e.currentTarget.style.color = 'white';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    e.currentTarget.style.background = '#fee2e2';
+                                                    e.currentTarget.style.color = '#ef4444';
                                                 }}
                                                 title="Supprimer la commande"
                                             >
-                                                <XCircle size={16} />
+                                                <XCircle size={12} /> Supprimer
                                             </button>
                                         </div>
                                         <div style={{ color: '#94a3b8', fontSize: '0.7rem', fontWeight: 600 }}>{new Date(order.created_at).toLocaleDateString('fr-FR')}</div>
