@@ -6,9 +6,11 @@ import OilProcess from './OilProcess';
 import heroBg from '../assets/hero-bg.jpg';
 
 import ZaitounibioLogo from './ZaitounibioLogo';
+import { useLanguage } from '../context/LanguageContext';
 
 const About: React.FC = () => {
     const { hash } = useLocation();
+    const { isAr } = useLanguage();
 
     useEffect(() => {
         if (hash) {
@@ -25,26 +27,26 @@ const About: React.FC = () => {
     const values = [
         {
             icon: <Award className="text-primary" size={32} />,
-            title: "Excellence",
-            desc: "Une sélection rigoureuse des meilleurs terroirs pour une qualité sans compromis."
+            title: isAr ? "التميز" : "Excellence",
+            desc: isAr ? "اختيار دقيق لأفضل الأراضي لضمان جودة لا تضاهى." : "Une sélection rigoureuse des meilleurs terroirs pour une qualité sans compromis."
         },
         {
             icon: <ShieldCheck className="text-primary" size={32} />,
-            title: "Pureté",
-            desc: "Produits 100% naturels, sans additifs, préservant toutes leurs vertus originelles."
+            title: isAr ? "النقاء" : "Pureté",
+            desc: isAr ? "منتجات طبيعية 100%، بدون إضافات، تحافظ على جميع فوائدها الأصلية." : "Produits 100% naturels, sans additifs, préservant toutes leurs vertus originelles."
         },
         {
             icon: <Heart className="text-primary" size={32} />,
-            title: "Passion",
-            desc: "Un amour profond pour notre terre et un respect total du savoir-faire artisanal."
+            title: isAr ? "الشغف" : "Passion",
+            desc: isAr ? "حب عميق لأرضنا واحترام تام للمهارة الحرفية الأصيلة." : "Un amour profond pour notre terre et un respect total du savoir-faire artisanal."
         }
     ];
 
     const stats = [
-        { label: "Années d'Expérience", value: "15+" },
-        { label: "Producteurs Partenaires", value: "50+" },
-        { label: "Clients Satisfaits", value: "10k+" },
-        { label: "Produits Naturels", value: "100%" }
+        { label: isAr ? "سنوات من الخبرة" : "Années d'Expérience", value: "15+" },
+        { label: isAr ? "منتجون شركاء" : "Producteurs Partenaires", value: "50+" },
+        { label: isAr ? "زبناء راضون" : "Clients Satisfaits", value: "10k+" },
+        { label: isAr ? "منتجات طبيعية" : "Produits Naturels", value: "100%" }
     ];
 
     return (
@@ -87,7 +89,7 @@ const About: React.FC = () => {
                         marginBottom: '1.5rem',
                         fontFamily: 'var(--font-heading)'
                     }}>
-                        L'Âme de notre Terroir
+                        {isAr ? 'روح أرضنا الأصيلة' : "L'Âme de notre Terroir"}
                     </h1>
                     <p style={{
                         fontSize: 'clamp(1.1rem, 2vw, 1.3rem)',
@@ -96,7 +98,9 @@ const About: React.FC = () => {
                         opacity: 0.9,
                         lineHeight: 1.6
                     }}>
-                        Depuis plus de 15 ans, nous parcourons les terroirs les plus reculés du Maroc pour vous offrir l'essence même de la nature.
+                        {isAr
+                            ? 'منذ أكثر من 15 عاماً، نجوب أجود المناطق الفلاحية في المغرب لنقدم لكم خلاصة الطبيعة النقية.'
+                            : "Depuis plus de 15 ans, nous parcourons les terroirs les plus reculés du Maroc pour vous offrir l'essence même de la nature."}
                     </p>
                 </motion.div>
 
@@ -116,7 +120,7 @@ const About: React.FC = () => {
             <section style={{ padding: '8rem 0', position: 'relative' }}>
                 <div className="container">
                     <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
-                        <h2 className="section-title">Nos Valeurs Fondamentales</h2>
+                        <h2 className="section-title">{isAr ? 'قيمنا الأساسية' : 'Nos Valeurs Fondamentales'}</h2>
                     </div>
                     <div style={{
                         display: 'grid',
@@ -179,16 +183,21 @@ const About: React.FC = () => {
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--primary-dark)', fontWeight: 600, marginBottom: '1.5rem' }}>
                                 <MapPin size={20} />
-                                <span>Origine & Terroir</span>
+                                <span>{isAr ? 'الأصل والمنطقة' : 'Origine & Terroir'}</span>
                             </div>
                             <h2 style={{ fontSize: '3rem', color: 'var(--secondary)', marginBottom: '2rem', fontFamily: 'var(--font-heading)', lineHeight: 1.2 }}>
-                                Une Quête de <br />Perfection
+                                {isAr ? <>بحث دائم عن <br />الإتقان</> : <>Une Quête de <br />Perfection</>}
                             </h2>
                             <p style={{ color: 'var(--text-muted)', fontSize: '1.15rem', lineHeight: 1.8, marginBottom: '2rem' }}>
-                                Notre voyage commence dans les montagnes de l'Atlas et les plaines ensoleillées du Souss. Nous travaillons main dans la main avec des coopératives locales qui partagent notre vision d'une agriculture durable et respectueuse de la biodiversité.
+                                {isAr
+                                    ? 'تبدأ رحلتنا في جبال الأطلس وسهول العطاوية وسوس المشمسة. نعمل يداً بيد مع التعاونيات المحلية التي تشاركنا رؤيتنا لفلاحة مستدامة تحترم الطبيعة.'
+                                    : "Notre voyage commence dans les montagnes de l'Atlas et les plaines ensoleillées du Souss. Nous travaillons main dans la main avec des coopératives locales qui partagent notre vision d'une agriculture durable et respectueuse de la biodiversité."}
                             </p>
                             <ul style={{ listStyle: 'none', padding: 0 }}>
-                                {['Miel d\'Euphorbe du Haut Atlas', 'Huile d\'Olive Aataoui de Kelaa Sraghna', 'Argan d\'Essaouira'].map((item, i) => (
+                                {(isAr
+                                    ? ['عسل الدغموس من الأطلس الكبير', 'زيت زيتون العطاوية - قلعة السراغنة', 'أركان الصويرة الأصيل']
+                                    : ['Miel d\'Euphorbe du Haut Atlas', 'Huile d\'Olive Aataoui de Kelaa Sraghna', 'Argan d\'Essaouira']
+                                ).map((item, i) => (
                                     <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.8rem', color: 'var(--secondary)', fontWeight: 500 }}>
                                         <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary)' }} />
                                         {item}
@@ -237,22 +246,24 @@ const About: React.FC = () => {
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--primary-dark)', fontWeight: 600, marginBottom: '1.5rem' }}>
                                 <Calendar size={20} />
-                                <span>Tradition & Savoir-faire</span>
+                                <span>{isAr ? 'تقاليد ومهارة' : 'Tradition & Savoir-faire'}</span>
                             </div>
                             <h2 style={{ fontSize: '3rem', color: 'var(--secondary)', marginBottom: '2rem', fontFamily: 'var(--font-heading)', lineHeight: 1.2 }}>
-                                L'Incomparable <br />Art du Bio
+                                {isAr ? <>فن المنتجات <br />الطبيعية الأصيلة</> : <>L'Incomparable <br />Art du Bio</>}
                             </h2>
                             <p style={{ color: 'var(--text-muted)', fontSize: '1.15rem', lineHeight: 1.8, marginBottom: '2rem' }}>
-                                Chaque goutte d'huile et chaque gramme de miel que nous proposons est traité avec le plus grand soin. De la récolte manuelle à la filtration douce, nous veillons à ce que le produit fini soit identique à ce que la nature nous a offert.
+                                {isAr
+                                    ? 'كل قطرة من زيت الزيتون وكل غرام من العسل نقدمه لكم يتم التعامل معه بأقصى درجات العناية. من الجني اليدوي إلى التصفية الطبيعية، نحرص على أن يكون المنتج النهائي مطابقاً لما منحتنا إياه الطبيعة.'
+                                    : "Chaque goutte d'huile et chaque gramme de miel que nous proposons est traité avec le plus grand soin. De la récolte manuelle à la filtration douce, nous veillons à ce que le produit fini soit identique à ce que la nature nous a offert."}
                             </p>
                             <div style={{ display: 'flex', gap: '2rem' }}>
-                                <div className="glass-morphism" style={{ padding: '1.5rem', borderRadius: 'var(--radius-md)', flex: 1, background: 'rgba(212, 175, 55, 0.05)' }}>
-                                    <h4 style={{ color: 'var(--primary-dark)', marginBottom: '0.5rem' }}>Extraction</h4>
-                                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Pressage à froid traditionnel</p>
+                                <div className="glass-morphism" style={{ padding: '1.5rem', borderRadius: 'var(--radius-md)', flex: 1, background: 'rgba(124, 179, 66, 0.08)' }}>
+                                    <h4 style={{ color: 'var(--primary-dark)', marginBottom: '0.5rem' }}>{isAr ? 'الاستخلاص' : 'Extraction'}</h4>
+                                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{isAr ? 'عصر تقليدي على البارد' : 'Pressage à froid traditionnel'}</p>
                                 </div>
-                                <div className="glass-morphism" style={{ padding: '1.5rem', borderRadius: 'var(--radius-md)', flex: 1, background: 'rgba(212, 175, 55, 0.05)' }}>
-                                    <h4 style={{ color: 'var(--primary-dark)', marginBottom: '0.5rem' }}>Contrôle</h4>
-                                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Analyses laboratoires rigoureuses</p>
+                                <div className="glass-morphism" style={{ padding: '1.5rem', borderRadius: 'var(--radius-md)', flex: 1, background: 'rgba(124, 179, 66, 0.08)' }}>
+                                    <h4 style={{ color: 'var(--primary-dark)', marginBottom: '0.5rem' }}>{isAr ? 'المراقبة' : 'Contrôle'}</h4>
+                                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{isAr ? 'تحاليل مخبرية دقيقة' : 'Analyses laboratoires rigoureuses'}</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -316,13 +327,15 @@ const About: React.FC = () => {
                     >
                         <Users size={60} className="text-primary" style={{ marginBottom: '2rem' }} />
                         <h2 style={{ fontSize: '3rem', color: 'var(--secondary)', marginBottom: '2rem', fontFamily: 'var(--font-heading)' }}>
-                            Rejoignez l'Aventure Zaitouni Bio
+                            {isAr ? 'انضموا إلى عائلة زيتوني بيو' : "Rejoignez l'Aventure Zaitouni Bio"}
                         </h2>
                         <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', lineHeight: 1.8, marginBottom: '3rem' }}>
-                            Nos produits sont bien plus que de la nourriture. Ils sont le reflet d'une culture, d'un terroir et d'un engagement pour une vie plus saine.
+                            {isAr
+                                ? 'منتجاتنا هي أكثر من مجرد غذاء؛ إنها انعكاس لثقافة عريقة، وأرض معطاءة، والتزام بحياة صحية وطبيعية.'
+                                : "Nos produits sont bien plus que de la nourriture. Ils sont le reflet d'une culture, d'un terroir et d'un engagement pour une vie plus saine."}
                         </p>
                         <Link to="/catalog" className="btn btn-primary" style={{ padding: '1.2rem 3.5rem', fontSize: '1.1rem', textDecoration: 'none' }}>
-                            Découvrir nos produits
+                            {isAr ? 'اكتشف منتجاتنا' : 'Découvrir nos produits'}
                         </Link>
                     </motion.div>
                 </div>

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 import heroBg from '../assets/hero-bg.jpg';
 
 const Hero: React.FC = () => {
+    const { isAr } = useLanguage();
     return (
         <section id="hero" style={{
             minHeight: '100vh',
@@ -63,32 +65,32 @@ const Hero: React.FC = () => {
                     }}
                 >
                     <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#a3e635', boxShadow: '0 0 10px #a3e635' }} />
-                    Premium, Naturel & 100% Bio
+                    {isAr ? 'جودة ممتازة، طبيعي 100% وبيو' : 'Premium, Naturel & 100% Bio'}
                 </motion.div>
 
                 <h1 style={{
                     fontSize: 'clamp(2.2rem, 10vw, 5.5rem)',
                     marginBottom: '1rem',
-                    lineHeight: 1,
+                    lineHeight: isAr ? 1.25 : 1,
                     fontWeight: 800,
                     color: '#ffffff',
-                    letterSpacing: '-0.03em',
+                    letterSpacing: isAr ? '0' : '-0.03em',
                     textShadow: '0 4px 16px rgba(0,0,0,0.35)'
                 }}>
-                    L'Essence de la <br />
+                    {isAr ? 'جوهر ' : <>L'Essence de la <br /></>}
                     <span style={{
                         color: '#a3e635',
-                        fontStyle: 'italic',
+                        fontStyle: isAr ? 'normal' : 'italic',
                         position: 'relative',
                         display: 'inline-block',
                         textShadow: '0 4px 20px rgba(85, 139, 47, 0.45)'
                     }}>
-                        Nature
+                        {isAr ? 'الطبيعة' : 'Nature'}
                         <svg style={{ position: 'absolute', bottom: '-10px', left: 0, width: '100%', height: '12px' }} viewBox="0 0 100 12" preserveAspectRatio="none">
                             <path d="M0,10 Q50,0 100,10" fill="none" stroke="#ffffff" strokeWidth="4" opacity="0.85" />
                         </svg>
                     </span>
-                    {" "}Pure
+                    {" "}{isAr ? 'النقية' : 'Pure'}
                 </h1>
 
                 <p style={{
@@ -101,8 +103,9 @@ const Hero: React.FC = () => {
                     lineHeight: 1.6,
                     textShadow: '0 2px 8px rgba(0,0,0,0.35)'
                 }}>
-                    Découvrez une sélection d'exception de miel pur, huiles et cosmétiques bio,
-                    récoltés avec respect au cœur des terroirs les plus préservés.
+                    {isAr
+                        ? 'اكتشفوا تشكيلة استثنائية من زيت الزيتون الحر، العسل الطبيعي والمنتجات الطبيعية، المحصودة بعناية من قلب أجود الأراضي المغربية.'
+                        : "Découvrez une sélection d'exception de miel pur, huiles et cosmétiques bio, récoltés avec respect au cœur des terroirs les plus préservés."}
                 </p>
 
                 <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -126,8 +129,8 @@ const Hero: React.FC = () => {
                                 gap: '0.8rem'
                             }}
                         >
-                            Explorer la boutique
-                            <ArrowRight size={22} />
+                            {isAr ? 'تصفح المتجر' : 'Explorer la boutique'}
+                            <ArrowRight size={22} style={{ transform: isAr ? 'rotate(180deg)' : 'none' }} />
                         </Link>
                     </motion.div>
                     <motion.div
@@ -148,7 +151,7 @@ const Hero: React.FC = () => {
                                 display: 'inline-block'
                             }}
                         >
-                            Notre savoir-faire
+                            {isAr ? 'خبرتنا وأصالتنا' : 'Notre savoir-faire'}
                         </Link>
                     </motion.div>
                 </div>

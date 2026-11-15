@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ShoppingCart, Zap, Star, ChevronRight, Minus, Plus } from 'lucide-react';
 import api, { getImageUrl } from '../api/axios';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
 import { DEFAULT_PRODUCTS } from '../data/defaultProducts';
 
 interface ProductDetailsProps {
@@ -14,11 +15,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onOrder }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    const { lang, setLang, isAr } = useLanguage();
     const [product, setProduct] = useState<any>(() => DEFAULT_PRODUCTS.find(p => String(p.id) === String(id)) || null);
     const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<'fr' | 'ar'>('fr');
+    const [activeTab, setActiveTab] = useState<'fr' | 'ar'>(lang);
     const [quantity, setQuantity] = useState(1);
     const [isImageOpen, setIsImageOpen] = useState(false);
+
+    useEffect(() => {
+        setActiveTab(lang);
+    }, [lang]);
 
     useEffect(() => {
         const fallback = DEFAULT_PRODUCTS.find(p => String(p.id) === String(id)) || null;
@@ -74,16 +80,19 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onOrder }) => {
         </div>
     );
 
-    const priceNum = parseFloat(product.price.replace(/[^\d.]/g, ''));
+    const priceNum = parseFloat(String(product.price).replace(/[^\d.]/g, ''));
+    const unitLiters = product.weight ? parseFloat(String(product.weight).replace(/[^\d.]/g, '')) || 1 : 1;
+    const totalLiters = unitLiters * quantity;
+    const isOver10L = totalLiters > 10;
 
     return (
         <div style={{ background: '#fcfcfc', minHeight: '100vh', paddingTop: '80px', fontFamily: 'var(--font-body)' }}>
 
             <div className="container" style={{ padding: '0.8rem 1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#94a3b8', fontSize: '0.8rem' }}>
-                    <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Accueil</Link>
+                    <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>{isAr ? 'الرئيسية' : 'Accueil'}</Link>
                     <ChevronRight size={12} />
-                    <span style={{ color: 'var(--secondary)', fontWeight: 600 }}>{product.name_fr}</span>
+                    <span style={{ color: 'var(--secondary)', fontWeight: 600 }}>{isAr ? (product.name_ar || product.name_fr) : product.name_fr}</span>
                 </div>
             </div>
 
@@ -102,7 +111,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onOrder }) => {
                                 marginBottom: '1.5rem', color: 'var(--text-muted)', fontWeight: 600
                             }}
                         >
-                            <ArrowLeft size={20} /> Retour
+                            <ArrowLeft size={20} /> {isAr ? 'رجوع' : 'Retour'}
                         </motion.button>
 
                         <motion.div
@@ -148,7 +157,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onOrder }) => {
                                 display: 'flex', gap: '4px'
                             }}>
                                 <button
-                                    onClick={() => setActiveTab('fr')}
+                                    onClick={() => { setActiveTab('fr'); setLang('fr'); }}
                                     style={{
                                         padding: '6px 16px', borderRadius: '24px', border: 'none',
                                         background: activeTab === 'fr' ? 'white' : 'transparent',
@@ -159,7 +168,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onOrder }) => {
                                     }}
                                 >FR</button>
                                 <button
-                                    onClick={() => setActiveTab('ar')}
+                                    onClick={() => { setActiveTab('ar'); setLang('ar'); }}
                                     style={{
                                         padding: '6px 16px', borderRadius: '24px', border: 'none',
                                         background: activeTab === 'ar' ? 'white' : 'transparent',
@@ -248,12 +257,30 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onOrder }) => {
                         </div>
 
                         {/* Complete Action Bar */}
+                        {isOver10L && (
+                            <div style={{
+                                padding: '1rem 1.25rem',
+                                borderRadius: '16px',
+                                background: '#eef7e3',
+                                border: '1.5px solid #7cb342',
+                                color: 'var(--secondary)',
+                                fontSize: '0.92rem',
+                                fontWeight: 600,
+                                marginBottom: '1rem'
+                            }}>
+                                {activeTab === 'ar' ? (
+                                    <>لطلب أكثر من <strong>10 لترات</strong> ({totalLiters} لتر)، المرجو التواصل معنا مباشرة عبر الواتساب.</>
+                                ) : (
+                                    <>Pour une commande supérieure à <strong>10 Litres</strong> ({totalLiters}L sélectionnés), veuillez nous contacter directement sur WhatsApp.</>
+                                )}
+                            </div>
+                        )}
                         <div style={{
                             display: 'flex',
                             flexWrap: 'wrap',
                             gap: '1rem',
                             alignItems: 'center',
-                            marginTop: '2rem',
+                            marginTop: '1rem',
                             padding: '1rem',
                             background: 'white',
                             borderRadius: '24px',
@@ -270,25 +297,84 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onOrder }) => {
                             </div>
 
                             <div className="action-buttons-container" style={{ display: 'flex', gap: '0.8rem', flex: 1, flexWrap: 'wrap' }}>
-                                <button onClick={handleAddToCart} style={{
-                                    flex: '1 1 120px', padding: '1rem', borderRadius: '16px', border: '2px solid #e2e8f0', background: 'white',
-                                    color: 'var(--secondary)', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                                    fontSize: '0.9rem'
-                                }}>
-                                    <ShoppingCart size={20} />
-                                    PANIER
-                                </button>
+                                {isOver10L ? (
+                                    <a
+                                        href={`https://wa.me/212674434896?text=${encodeURIComponent(`Bonjour, je souhaite commander ${quantity}x ${product.name_fr} (${totalLiters}L au total).`)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            flex: '1 1 220px',
+                                            padding: '1rem',
+                                            borderRadius: '16px',
+                                            border: 'none',
+                                            background: '#25D366',
+                                            color: 'white',
+                                            fontWeight: 800,
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '0.8rem',
+                                            fontSize: '0.95rem',
+                                            textDecoration: 'none',
+                                            boxShadow: '0 8px 20px rgba(37, 211, 102, 0.35)'
+                                        }}
+                                    >
+                                        {activeTab === 'ar' ? 'اطلب +10 لتر عبر الواتساب' : 'COMMANDER +10L SUR WHATSAPP'}
+                                    </a>
+                                ) : (
+                                    <>
+                                        <button onClick={handleAddToCart} style={{
+                                            flex: '1 1 120px', padding: '1rem', borderRadius: '16px', border: '2px solid #e2e8f0', background: 'white',
+                                            color: 'var(--secondary)', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                                            fontSize: '0.9rem'
+                                        }}>
+                                            <ShoppingCart size={20} />
+                                            {activeTab === 'ar' ? 'السلة' : 'PANIER'}
+                                        </button>
 
-                                <button onClick={handleBuyNow} style={{
-                                    flex: '2 1 160px', padding: '1rem', borderRadius: '16px', border: 'none', background: 'var(--secondary)',
-                                    color: 'white', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem',
-                                    fontSize: '0.95rem',
-                                    minWidth: 'fit-content' // Prevent crushing
-                                }}>
-                                    <Zap size={18} fill="white" />
-                                    COMMANDER
-                                </button>
+                                        <button onClick={handleBuyNow} style={{
+                                            flex: '2 1 160px', padding: '1rem', borderRadius: '16px', border: 'none', background: 'var(--secondary)',
+                                            color: 'white', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem',
+                                            fontSize: '0.95rem',
+                                            minWidth: 'fit-content'
+                                        }}>
+                                            <Zap size={18} fill="white" />
+                                            {activeTab === 'ar' ? 'اطلب الآن' : 'COMMANDER'}
+                                        </button>
+                                    </>
+                                )}
                             </div>
+                        </div>
+
+                        {/* Notice for > 10L */}
+                        <div style={{
+                            marginTop: '1rem',
+                            padding: '0.85rem 1.2rem',
+                            borderRadius: '14px',
+                            background: '#f8fbf4',
+                            border: '1px dashed rgba(124, 179, 66, 0.5)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            gap: '0.75rem',
+                            fontSize: '0.88rem',
+                            color: '#475569'
+                        }}>
+                            <span>
+                                {activeTab === 'ar'
+                                    ? <>📦 <strong>أكثر من 10 لتر ؟</strong> تواصلوا معنا مباشرة عبر الواتساب.</>
+                                    : <>📦 <strong>Plus de 10 Litres ?</strong> Contactez-nous directement sur WhatsApp.</>}
+                            </span>
+                            <a
+                                href="https://wa.me/212674434896?text=Bonjour, je souhaite commander plus de 10 litres d'huile d'olive."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ color: '#25D366', fontWeight: 800, textDecoration: 'none' }}
+                            >
+                                WhatsApp (+212 674-434896) →
+                            </a>
                         </div>
 
                     </motion.div>

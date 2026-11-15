@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Zap } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { getImageUrl } from '../api/axios';
 
@@ -23,6 +24,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ id, name, name_ar, price, image, onOrder, weight, is_promo, discount_price }) => {
   const { addToCart } = useCart();
+  const { isAr } = useLanguage();
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -79,7 +81,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, name, name_ar, price, ima
               fontWeight: 800,
               boxShadow: '0 4px 10px rgba(239, 68, 68, 0.2)'
             }}>
-              PROMO
+              {isAr ? 'عرض خاص' : 'PROMO'}
             </div>
           )}
         </div>
@@ -97,13 +99,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, name, name_ar, price, ima
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            height: '2.4em', // Fixed height for 2 lines approximately
+            height: '2.4em',
             lineHeight: '1.2'
           }}>
-            {name}
+            {isAr ? (name_ar || name) : name}
           </h3>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            {name_ar && (
+            {name_ar && !isAr && (
               <span style={{ fontSize: '0.85rem', fontFamily: 'Amiri', color: '#94a3b8', direction: 'rtl' }}>
                 {name_ar}
               </span>
@@ -117,13 +119,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, name, name_ar, price, ima
         </div>
 
         <div style={{ marginTop: 'auto', paddingTop: '0.5rem' }}>
-          {is_promo && promoPrice > 0 ? (
+          {is_promo && promoPrice > 0 && promoPrice < originalPrice ? (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.75rem', textDecoration: 'line-through', color: '#cbd5e1' }}>{originalPrice} DH</span>
-              <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ef4444' }}>{promoPrice} <small>DH</small></span>
+              <span style={{ fontSize: '0.75rem', textDecoration: 'line-through', color: '#cbd5e1' }}>{originalPrice} {isAr ? 'درهم' : 'DH'}</span>
+              <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ef4444' }}>{promoPrice} <small>{isAr ? 'درهم' : 'DH'}</small></span>
             </div>
           ) : (
-            <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--primary-dark)' }}>{originalPrice} <small style={{ fontSize: '0.7rem' }}>DH</small></span>
+            <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--primary-dark)' }}>{originalPrice} <small style={{ fontSize: '0.7rem' }}>{isAr ? 'درهم' : 'DH'}</small></span>
           )}
         </div>
 
@@ -139,7 +141,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, name, name_ar, price, ima
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              flexShrink: 0 // Prevent crushing
+              flexShrink: 0
             }}
           >
             <ShoppingCart size={16} />
@@ -148,24 +150,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, name, name_ar, price, ima
             onClick={handleOrderNow}
             style={{
               flex: 1,
-              padding: '0.5rem 0.2rem', // Reduced horizontal padding
+              padding: '0.5rem 0.2rem',
               borderRadius: '10px',
               border: 'none',
               background: 'var(--secondary)',
               color: 'white',
               fontWeight: 700,
-              fontSize: '0.7rem', // Smaller font
+              fontSize: '0.75rem',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.2rem', // Tighter gap
-              whiteSpace: 'nowrap', // Force single line
+              gap: '0.25rem',
+              whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis'
             }}
           >
-            <Zap size={14} fill="white" /> COMMANDER
+            <Zap size={14} fill="white" /> {isAr ? 'اطلب الآن' : 'COMMANDER'}
           </button>
         </div>
       </div>

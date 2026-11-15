@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingBag, Trash2, Plus, Minus, CreditCard, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface CartDrawerProps {
     isOpen: boolean;
@@ -12,7 +13,14 @@ interface CartDrawerProps {
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onCheckout }) => {
     const navigate = useNavigate();
+    const { isAr } = useLanguage();
     const { cartItems, removeFromCart, updateQuantity, cartTotal, cartCount, deliveryFee, totalWithDelivery } = useCart();
+
+    const totalCartLiters = cartItems.reduce((sum, item) => {
+        const liters = item.weight ? parseFloat(String(item.weight).replace(/[^\d.]/g, '')) || 1 : 1;
+        return sum + liters * item.quantity;
+    }, 0);
+    const isCartOver10L = totalCartLiters > 10;
 
     const handleDiscover = () => {
         onClose();
@@ -62,7 +70,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onCheckout }) 
                         <div style={{ padding: '2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                 <ShoppingBag size={24} color="var(--primary)" />
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--secondary)' }}>Mon Panier</h2>
+                                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--secondary)' }}>{isAr ? 'سلتي' : 'Mon Panier'}</h2>
                                 <span style={{ background: 'var(--primary-light)', color: 'var(--primary-dark)', padding: '0.2rem 0.8rem', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700 }}>
                                     {cartCount}
                                 </span>
@@ -77,8 +85,8 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onCheckout }) 
                             {cartItems.length === 0 ? (
                                 <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: '1.5rem', color: '#64748b' }}>
                                     <ShoppingBag size={64} opacity={0.2} />
-                                    <p style={{ fontSize: '1.1rem' }}>Votre panier est vide pour le moment.</p>
-                                    <button onClick={handleDiscover} className="btn btn-primary" style={{ padding: '0.8rem 2rem' }}>Découvrir nos produits</button>
+                                    <p style={{ fontSize: '1.1rem' }}>{isAr ? 'سلتك فارغة حالياً.' : 'Votre panier est vide pour le moment.'}</p>
+                                    <button onClick={handleDiscover} className="btn btn-primary" style={{ padding: '0.8rem 2rem' }}>{isAr ? 'اكتشف منتجاتنا' : 'Découvrir nos produits'}</button>
                                 </div>
                             ) : (
                                 cartItems.map((item) => (
@@ -130,30 +138,71 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, onCheckout }) 
                             <div style={{ padding: '2rem', background: '#f8fafc', borderTop: '1px solid #f1f5f9' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', marginBottom: '1.5rem' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '1rem', color: '#64748b', fontWeight: 600 }}>Sous-total</span>
-                                        <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--secondary)' }}>{cartTotal} DH</span>
+                                        <span style={{ fontSize: '1rem', color: '#64748b', fontWeight: 600 }}>{isAr ? 'المجموع الفرعي' : 'Sous-total'}</span>
+                                        <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--secondary)' }}>{cartTotal} {isAr ? 'درهم' : 'DH'}</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '1rem', color: '#64748b', fontWeight: 600 }}>Livraison</span>
-                                        <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary-dark)' }}>{deliveryFee} DH</span>
+                                        <span style={{ fontSize: '1rem', color: '#64748b', fontWeight: 600 }}>{isAr ? 'التوصيل' : 'Livraison'}</span>
+                                        <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary-dark)' }}>{deliveryFee} {isAr ? 'درهم' : 'DH'}</span>
                                     </div>
                                     <div style={{ height: '1px', background: '#e2e8f0', margin: '0.5rem 0' }} />
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '1.1rem', color: 'var(--secondary)', fontWeight: 800 }}>Total</span>
-                                        <span style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--secondary)' }}>{totalWithDelivery} DH</span>
+                                        <span style={{ fontSize: '1.1rem', color: 'var(--secondary)', fontWeight: 800 }}>{isAr ? 'المجموع الإجمالي' : 'Total'}</span>
+                                        <span style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--secondary)' }}>{totalWithDelivery} {isAr ? 'درهم' : 'DH'}</span>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={onCheckout}
-                                    className="btn btn-primary"
-                                    style={{ width: '100%', padding: '1.2rem', borderRadius: '16px', fontSize: '1.1rem', gap: '1rem', boxShadow: '0 10px 20px -5px rgba(212, 175, 55, 0.4)' }}
-                                >
-                                    <CreditCard size={22} />
-                                    Finaliser la commande
-                                    <ArrowRight size={22} style={{ marginLeft: 'auto' }} />
-                                </button>
+                                {isCartOver10L ? (
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                        <div style={{
+                                            padding: '0.85rem 1rem',
+                                            borderRadius: '12px',
+                                            background: '#eef7e3',
+                                            border: '1px solid #7cb342',
+                                            fontSize: '0.85rem',
+                                            color: 'var(--secondary)',
+                                            textAlign: 'center',
+                                            fontWeight: 600
+                                        }}>
+                                            {isAr ? (
+                                                <>تجاوزت سلتك <strong>10 لترات ({totalCartLiters} لتر)</strong>. لطلب أكثر من 10 لتر، المرجو الطلب مباشرة عبر الواتساب.</>
+                                            ) : (
+                                                <>Votre panier dépasse <strong>10 Litres ({totalCartLiters}L)</strong>. Pour plus de 10L, veuillez commander directement sur WhatsApp.</>
+                                            )}
+                                        </div>
+                                        <a
+                                            href={`https://wa.me/212674434896?text=${encodeURIComponent(`Bonjour, je souhaite commander plus de 10L (${totalCartLiters}L au total) : ${cartItems.map(i => `${i.quantity}x ${i.name}`).join(', ')}`)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="btn"
+                                            style={{
+                                                width: '100%',
+                                                padding: '1.2rem',
+                                                borderRadius: '16px',
+                                                fontSize: '1.05rem',
+                                                background: '#25D366',
+                                                color: 'white',
+                                                fontWeight: 800,
+                                                textDecoration: 'none',
+                                                boxShadow: '0 10px 20px -5px rgba(37, 211, 102, 0.4)'
+                                            }}
+                                        >
+                                            {isAr ? 'اطلب +10 لتر عبر الواتساب' : 'Commander +10L sur WhatsApp'}
+                                            <ArrowRight size={22} style={{ marginLeft: 'auto', transform: isAr ? 'rotate(180deg)' : 'none' }} />
+                                        </a>
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={onCheckout}
+                                        className="btn btn-primary"
+                                        style={{ width: '100%', padding: '1.2rem', borderRadius: '16px', fontSize: '1.1rem', gap: '1rem', boxShadow: '0 10px 20px -5px rgba(124, 179, 66, 0.4)' }}
+                                    >
+                                        <CreditCard size={22} />
+                                        {isAr ? 'إتمام الطلب' : 'Finaliser la commande'}
+                                        <ArrowRight size={22} style={{ marginLeft: 'auto', transform: isAr ? 'rotate(180deg)' : 'none' }} />
+                                    </button>
+                                )}
                                 <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.8rem', color: '#64748b' }}>
-                                    Paiement sécurisé à la livraison partout au Maroc.
+                                    {isAr ? 'الدفع آمن عند الاستلام في جميع أنحاء المغرب.' : 'Paiement sécurisé à la livraison partout au Maroc.'}
                                 </p>
                             </div>
                         )}

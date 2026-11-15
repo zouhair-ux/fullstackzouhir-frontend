@@ -5,12 +5,14 @@ import api, { getImageUrl } from '../api/axios';
 import ZaitounibioLogo from './ZaitounibioLogo';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
 import { DEFAULT_PRODUCTS } from '../data/defaultProducts';
 
 const Navbar: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { cartCount, setIsCartOpen } = useCart();
+    const { lang, setLang, isAr } = useLanguage();
     const location = useLocation();
 
     // Search State
@@ -71,9 +73,9 @@ const Navbar: React.FC = () => {
     }, [searchTerm, allProducts]);
 
     const navLinks = [
-        { name: 'Accueil', path: '/' },
-        { name: 'Boutique', path: '/catalog' },
-        { name: 'Notre Histoire', path: '/about' },
+        { name: isAr ? 'الرئيسية' : 'Accueil', path: '/' },
+        { name: isAr ? 'المتجر' : 'Boutique', path: '/catalog' },
+        { name: isAr ? 'قصتنا' : 'Notre Histoire', path: '/about' },
     ];
 
     useEffect(() => {
@@ -175,7 +177,7 @@ const Navbar: React.FC = () => {
                                     >
                                         <input
                                             type="text"
-                                            placeholder="Rechercher..."
+                                            placeholder={isAr ? 'ابحث عن منتج...' : 'Rechercher...'}
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             autoFocus
@@ -236,7 +238,7 @@ const Navbar: React.FC = () => {
                                         }}
                                     >
                                         <div style={{ padding: '0.5rem 1rem', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                                            Résultats
+                                            {isAr ? 'النتائج' : 'Résultats'}
                                         </div>
                                         {searchResults.map(product => (
                                             <Link
@@ -259,11 +261,11 @@ const Navbar: React.FC = () => {
                                                 onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                                             >
                                                 <div style={{ width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
-                                                    <img src={getImageUrl(product.image)} alt={product.name_fr} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    <img src={getImageUrl(product.image)} alt={isAr ? (product.name_ar || product.name_fr) : product.name_fr} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                 </div>
                                                 <div style={{ flex: 1 }}>
-                                                    <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--secondary)' }}>{product.name_fr}</div>
-                                                    <div style={{ fontSize: '0.8rem', color: 'var(--primary-dark)', fontWeight: 600 }}>{product.price} DH</div>
+                                                    <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--secondary)' }}>{isAr ? (product.name_ar || product.name_fr) : product.name_fr}</div>
+                                                    <div style={{ fontSize: '0.8rem', color: 'var(--primary-dark)', fontWeight: 600 }}>{product.price} {isAr ? 'درهم' : 'DH'}</div>
                                                 </div>
                                                 <ChevronRight size={16} color="#94a3b8" />
                                             </Link>
@@ -282,7 +284,7 @@ const Navbar: React.FC = () => {
                                                 textDecoration: 'none'
                                             }}
                                         >
-                                            Voir tous les produits
+                                            {isAr ? 'عرض جميع المنتجات' : 'Voir tous les produits'}
                                         </Link>
                                     </motion.div>
                                 )}
@@ -335,6 +337,52 @@ const Navbar: React.FC = () => {
                             </AnimatePresence>
                         </motion.button>
 
+                        {/* Language Switcher Pill (FR | عربي) */}
+                        <div style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            background: shouldShowScrolled ? '#f1f5f9' : 'rgba(255, 255, 255, 0.18)',
+                            backdropFilter: 'blur(8px)',
+                            padding: '3px',
+                            borderRadius: '999px',
+                            border: shouldShowScrolled ? '1px solid #e2e8f0' : '1px solid rgba(255, 255, 255, 0.35)',
+                            gap: '2px'
+                        }}>
+                            <button
+                                onClick={() => setLang('fr')}
+                                style={{
+                                    padding: '4px 10px',
+                                    borderRadius: '999px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontSize: '0.78rem',
+                                    fontWeight: 800,
+                                    background: lang === 'fr' ? (shouldShowScrolled ? 'var(--secondary)' : '#ffffff') : 'transparent',
+                                    color: lang === 'fr' ? (shouldShowScrolled ? '#ffffff' : 'var(--secondary)') : (shouldShowScrolled ? 'var(--secondary)' : '#ffffff'),
+                                    transition: 'all 0.25s ease'
+                                }}
+                            >
+                                FR
+                            </button>
+                            <button
+                                onClick={() => setLang('ar')}
+                                style={{
+                                    padding: '4px 10px',
+                                    borderRadius: '999px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontSize: '0.82rem',
+                                    fontWeight: 800,
+                                    fontFamily: 'Cairo, Amiri, sans-serif',
+                                    background: lang === 'ar' ? (shouldShowScrolled ? 'var(--secondary)' : '#ffffff') : 'transparent',
+                                    color: lang === 'ar' ? (shouldShowScrolled ? '#ffffff' : 'var(--secondary)') : (shouldShowScrolled ? 'var(--secondary)' : '#ffffff'),
+                                    transition: 'all 0.25s ease'
+                                }}
+                            >
+                                عربي
+                            </button>
+                        </div>
+
                         {/* Order Button (Desktop) */}
                         <Link to="/catalog" className="btn btn-primary desktop-only" style={{
                             padding: '0.6rem 1.8rem',
@@ -344,9 +392,9 @@ const Navbar: React.FC = () => {
                             color: shouldShowScrolled ? 'white' : 'var(--secondary)',
                             border: 'none',
                             fontWeight: 800,
-                            letterSpacing: '1px'
+                            letterSpacing: isAr ? '0' : '1px'
                         }}>
-                            COMMANDER
+                            {isAr ? 'اطلب الآن' : 'COMMANDER'}
                         </Link>
 
                         {/* Mobile Menu Toggle */}
@@ -428,10 +476,10 @@ const Navbar: React.FC = () => {
                                     className="btn btn-primary"
                                     style={{ padding: '1.2rem', fontSize: '1.1rem', width: '100%', borderRadius: '16px' }}
                                 >
-                                    Faire mes achats
+                                    {isAr ? 'تصفح المتجر' : 'Faire mes achats'}
                                 </Link>
                                 <p style={{ textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                                    Zaitounibio - Pureté & Terroir
+                                    {isAr ? 'زيتوني بيو - نقاء وأصالة' : 'Zaitounibio - Pureté & Terroir'}
                                 </p>
                             </div>
                         </motion.div>

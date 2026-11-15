@@ -1,37 +1,39 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Leaf, Droplets, Hammer, Wind, ClipboardCheck } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const OilProcess: React.FC = () => {
+    const { isAr } = useLanguage();
     const phases = [
         {
             icon: <Leaf className="text-primary" size={32} />,
-            title: "Récolte Artisanale",
-            desc: "Les olives sont cueillies à la main à maturité parfaite pour préserver leur intégrité.",
+            title: isAr ? "جني تقليدي يدوي" : "Récolte Artisanale",
+            desc: isAr ? "يتم قطف الزيتون يدوياً عند النضج المثالي للحفاظ على جودته الكاملة." : "Les olives sont cueillies à la main à maturité parfaite pour préserver leur intégrité.",
             color: "rgba(102, 126, 61, 0.1)"
         },
         {
             icon: <Wind className="text-primary" size={32} />,
-            title: "Nettoyage & Tri",
-            desc: "Lavage à l'eau pure et élimination des feuilles pour ne garder que le meilleur du fruit.",
+            title: isAr ? "التنظيف والفرز" : "Nettoyage & Tri",
+            desc: isAr ? "غسل بالماء النقي وإزالة الأوراق للاحتفاظ بأجود الثمار فقط." : "Lavage à l'eau pure et élimination des feuilles pour ne garder que le meilleur du fruit.",
             color: "rgba(184, 134, 11, 0.1)"
         },
         {
             icon: <Hammer className="text-primary" size={32} />,
-            title: "Broyage Traditionnel",
-            desc: "Moulure à froid par meules de pierre, libérant les arômes sans chauffer la pâte.",
+            title: isAr ? "الطحن التقليدي" : "Broyage Traditionnel",
+            desc: isAr ? "طحن على البارد لإطلاق النكهات الطبيعية دون تسخين العجين." : "Moulure à froid par meules de pierre, libérant les arômes sans chauffer la pâte.",
             color: "rgba(102, 126, 61, 0.1)"
         },
         {
             icon: <Droplets className="text-primary" size={32} />,
-            title: "Extraction à Froid",
-            desc: "Séparation naturelle de l'huile vierge, conservant tous les nutriments essentiels.",
+            title: isAr ? "العصر على البارد" : "Extraction à Froid",
+            desc: isAr ? "استخلاص طبيعي لزيت الزيتون البكر مع الحفاظ على جميع العناصر الغذائية." : "Séparation naturelle de l'huile vierge, conservant tous les nutriments essentiels.",
             color: "rgba(184, 134, 11, 0.1)"
         },
         {
             icon: <ClipboardCheck className="text-primary" size={32} />,
-            title: "Repos & Pureté",
-            desc: "Décantation naturelle avant mise en bouteille, garantissant une clarté optimale.",
+            title: isAr ? "التصفية والنقاء" : "Repos & Pureté",
+            desc: isAr ? "ترسيب طبيعي قبل التعبئة لضمان صفاء وجودة عالية." : "Décantation naturelle avant mise en bouteille, garantissant une clarté optimale.",
             color: "rgba(102, 126, 61, 0.1)"
         }
     ];
@@ -52,7 +54,7 @@ const OilProcess: React.FC = () => {
                             fontSize: '0.9rem'
                         }}
                     >
-                        Notre Savoir-Faire
+                        {isAr ? 'خبرتنا الأصيلة' : 'Notre Savoir-Faire'}
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 30 }}
@@ -66,7 +68,7 @@ const OilProcess: React.FC = () => {
                             fontFamily: 'var(--font-heading)'
                         }}
                     >
-                        L'Huile d'Attaouia : Un Héritage
+                        {isAr ? 'زيت زيتون العطاوية : إرث أصيل' : "L'Huile d'Attaouia : Un Héritage"}
                     </motion.h2>
                     <motion.div
                         initial={{ width: 0 }}

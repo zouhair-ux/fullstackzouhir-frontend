@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, Phone, MessageSquare, CheckCircle2, Building2 } from 'lucide-react';
 import api from '../api/axios';
+import { useLanguage } from '../context/LanguageContext';
 
 interface OrderFormProps {
     productName: string;
@@ -9,6 +10,7 @@ interface OrderFormProps {
 }
 
 const OrderForm: React.FC<OrderFormProps> = ({ productName, onClose }) => {
+    const { isAr } = useLanguage();
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -94,8 +96,12 @@ const OrderForm: React.FC<OrderFormProps> = ({ productName, onClose }) => {
                             exit={{ opacity: 0 }}
                         >
                             <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-                                <h2 style={{ fontSize: '1.4rem', color: 'var(--secondary)', marginBottom: '0.3rem' }}>Commander Directement</h2>
-                                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Produit : <span style={{ color: 'var(--primary-dark)', fontWeight: 700 }}>{productName}</span></p>
+                                <h2 style={{ fontSize: '1.4rem', color: 'var(--secondary)', marginBottom: '0.3rem' }}>
+                                    {isAr ? 'اطلب مباشرة' : 'Commander Directement'}
+                                </h2>
+                                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                                    {isAr ? 'المنتج :' : 'Produit :'} <span style={{ color: 'var(--primary-dark)', fontWeight: 700 }}>{productName}</span>
+                                </p>
                             </div>
 
                             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -109,7 +115,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ productName, onClose }) => {
                                         value={formData.full_name}
                                         onChange={handleChange}
                                         required
-                                        placeholder="Nom Complet"
+                                        placeholder={isAr ? 'الاسم الكامل' : 'Nom Complet'}
                                         className="order-form-input"
                                     />
                                 </div>
@@ -124,7 +130,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ productName, onClose }) => {
                                         value={formData.telephone}
                                         onChange={handleChange}
                                         required
-                                        placeholder="Téléphone (06...)"
+                                        placeholder={isAr ? 'رقم الهاتف (06...)' : 'Téléphone (06...)'}
                                         className="order-form-input"
                                     />
                                 </div>
@@ -154,7 +160,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ productName, onClose }) => {
                                         name="message"
                                         value={formData.message}
                                         onChange={handleChange}
-                                        placeholder="Note ou Remarques (Optionnel)"
+                                        placeholder={isAr ? 'ملاحظة أو العنوان (اختياري)' : 'Note ou Remarques (Optionnel)'}
                                         className="order-form-input"
                                         style={{ minHeight: '80px', paddingTop: '0.8rem', resize: 'none' }}
                                     />
@@ -171,11 +177,35 @@ const OrderForm: React.FC<OrderFormProps> = ({ productName, onClose }) => {
                                         marginTop: '0.5rem'
                                     }}
                                 >
-                                    {loading ? 'Traitement...' : 'CONFIRMER LA COMMANDE'}
+                                    {loading ? (isAr ? 'جاري المعالجة...' : 'Traitement...') : (isAr ? 'تأكيد الطلب' : 'CONFIRMER LA COMMANDE')}
                                 </button>
                                 <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#94a3b8' }}>
-                                    Paiement à la livraison. Livraison: <span style={{ color: 'var(--primary-dark)', fontWeight: 700 }}>45 DH</span> (Inclus)
+                                    {isAr ? (
+                                        <>الدفع عند الاستلام. التوصيل: <span style={{ color: 'var(--primary-dark)', fontWeight: 700 }}>45 درهم</span> (مشمول)</>
+                                    ) : (
+                                        <>Paiement à la livraison. Livraison: <span style={{ color: 'var(--primary-dark)', fontWeight: 700 }}>45 DH</span> (Inclus)</>
+                                    )}
                                 </p>
+                                <div style={{
+                                    marginTop: '0.25rem',
+                                    padding: '0.75rem',
+                                    borderRadius: '12px',
+                                    background: '#f8fbf4',
+                                    border: '1px solid rgba(124, 179, 66, 0.35)',
+                                    textAlign: 'center',
+                                    fontSize: '0.8rem',
+                                    color: 'var(--secondary)'
+                                }}>
+                                    {isAr ? <>لطلب <strong>أكثر من 10 لتر</strong>، تواصلوا معنا عبر </> : <>Pour une commande de <strong>plus de 10L</strong>, contactez-nous sur </>}
+                                    <a
+                                        href="https://wa.me/212674434896?text=Bonjour, je souhaite commander plus de 10 litres d'huile d'olive."
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ color: '#25D366', fontWeight: 800, textDecoration: 'underline' }}
+                                    >
+                                        WhatsApp (+212 674-434896)
+                                    </a>
+                                </div>
                             </form>
                         </motion.div>
                     ) : (
@@ -191,16 +221,19 @@ const OrderForm: React.FC<OrderFormProps> = ({ productName, onClose }) => {
                             }}>
                                 <CheckCircle2 size={32} />
                             </div>
-                            <h2 style={{ fontSize: '1.5rem', color: 'var(--secondary)', marginBottom: '0.5rem' }}>Merci !</h2>
+                            <h2 style={{ fontSize: '1.5rem', color: 'var(--secondary)', marginBottom: '0.5rem' }}>{isAr ? 'شكراً لكم !' : 'Merci !'}</h2>
                             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>
-                                Commande reçue. <br />
-                                Nous vous appellerons pour confirmer.
+                                {isAr ? (
+                                    <>تم استلام طلبكم بنجاح. <br />سنتصل بكم لتأكيد الطلب.</>
+                                ) : (
+                                    <>Commande reçue. <br />Nous vous appellerons pour confirmer.</>
+                                )}
                             </p>
                             <button
                                 onClick={onClose}
                                 style={{ marginTop: '2rem', padding: '0.8rem 2rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: 'transparent', cursor: 'pointer' }}
                             >
-                                Fermer
+                                {isAr ? 'إغلاق' : 'Fermer'}
                             </button>
                         </motion.div>
                     )}

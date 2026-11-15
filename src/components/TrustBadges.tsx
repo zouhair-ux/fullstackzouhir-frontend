@@ -1,23 +1,25 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Banknote, Leaf, Truck } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const TrustBadges: React.FC = () => {
+    const { isAr } = useLanguage();
     const badges = [
         {
             icon: <Banknote size={32} />,
-            title: "Paiement à la livraison",
-            description: "Réglez votre commande en toute sécurité dès réception"
+            title: isAr ? "الدفع عند الاستلام" : "Paiement à la livraison",
+            description: isAr ? "ادفع طلبك بكل أمان عند استلامه" : "Réglez votre commande en toute sécurité dès réception"
         },
         {
             icon: <Leaf size={32} />,
-            title: "Produits 100% naturels",
-            description: "Sélectionnés avec soin pour leur pureté et qualité"
+            title: isAr ? "منتجات طبيعية 100%" : "Produits 100% naturels",
+            description: isAr ? "مختارة بعناية فائقة لنقائها وجودتها العالية" : "Sélectionnés avec soin pour leur pureté et qualité"
         },
         {
             icon: <Truck size={32} />,
-            title: "Livraison partout au Maroc",
-            description: "Expédition rapide et soignée dans toutes les villes"
+            title: isAr ? "التوصيل لجميع أنحاء المغرب" : "Livraison partout au Maroc",
+            description: isAr ? "شحن سريع وعناية فائقة إلى جميع المدن" : "Expédition rapide et soignée dans toutes les villes"
         }
     ];
 

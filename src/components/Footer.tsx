@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Mail, Phone, MapPin } from 'lucide-react';
 import ZaitounibioLogo from './ZaitounibioLogo';
+import { useLanguage } from '../context/LanguageContext';
 
 const Footer: React.FC = () => {
+    const { isAr } = useLanguage();
     return (
         <footer id="contact" style={{ padding: '8rem 0 4rem 0', background: 'var(--secondary)', color: 'white', position: 'relative', overflow: 'hidden' }}>
             {/* Decorative element */}
@@ -35,8 +37,9 @@ const Footer: React.FC = () => {
                             />
                         </Link>
                         <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2.5rem' }}>
-                            Nous connectons les produits les plus purs de la nature marocaine directement à votre foyer,
-                            pour une santé éclatante et un bien-être durable.
+                            {isAr
+                                ? 'نحن نربط أنقى منتجات الطبيعة المغربية مباشرة ببيتك، لصحة مشرقة ورفاهية دائمة.'
+                                : 'Nous connectons les produits les plus purs de la nature marocaine directement à votre foyer, pour une santé éclatante et un bien-être durable.'}
                         </p>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             {[
@@ -71,14 +74,14 @@ const Footer: React.FC = () => {
 
                     <div>
                         <h4 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '2rem', position: 'relative' }}>
-                            Quick Links
-                            <span style={{ position: 'absolute', bottom: '-0.5rem', left: 0, width: '30px', height: '2px', background: 'var(--primary)' }} />
+                            {isAr ? 'روابط سريعة' : 'Quick Links'}
+                            <span style={{ position: 'absolute', bottom: '-0.5rem', left: isAr ? 'auto' : 0, right: isAr ? 0 : 'auto', width: '30px', height: '2px', background: 'var(--primary)' }} />
                         </h4>
                         <ul style={{ listStyle: 'none', padding: 0 }}>
                             {[
-                                { name: 'Accueil', path: '/' },
-                                { name: 'Boutique', path: '/catalog' },
-                                { name: 'À Propos', path: '/about' },
+                                { name: isAr ? 'الرئيسية' : 'Accueil', path: '/' },
+                                { name: isAr ? 'المتجر' : 'Boutique', path: '/catalog' },
+                                { name: isAr ? 'من نحن' : 'À Propos', path: '/about' },
                             ].map((link) => (
                                 <li key={link.name} style={{ marginBottom: '1rem' }}>
                                     <Link to={link.path} style={{ color: 'white', textDecoration: 'none', opacity: 0.7, transition: '0.3s' }}
@@ -94,8 +97,8 @@ const Footer: React.FC = () => {
 
                     <div>
                         <h4 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '2rem', position: 'relative' }}>
-                            Contactez-nous
-                            <span style={{ position: 'absolute', bottom: '-0.5rem', left: 0, width: '30px', height: '2px', background: 'var(--primary)' }} />
+                            {isAr ? 'تواصل معنا' : 'Contactez-nous'}
+                            <span style={{ position: 'absolute', bottom: '-0.5rem', left: isAr ? 'auto' : 0, right: isAr ? 0 : 'auto', width: '30px', height: '2px', background: 'var(--primary)' }} />
                         </h4>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.7 }}>
@@ -104,18 +107,18 @@ const Footer: React.FC = () => {
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.7 }}>
                                 <Phone size={20} className="text-primary" />
-                                <span>+212 674-434896</span>
+                                <span dir="ltr">+212 674-434896</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.7 }}>
                                 <MapPin size={20} className="text-primary" />
-                                <span>Ataouia, Maroc</span>
+                                <span>{isAr ? 'العطاوية، المغرب' : 'Ataouia, Maroc'}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div style={{ textAlign: 'center', marginTop: '6rem', padding: '2rem 0 0 0', borderTop: '1px solid rgba(255,255,255,0.05)', opacity: 0.5, fontSize: '0.9rem' }}>
-                    <p>&copy; 2026 Zaitouni Bio. Cultivé avec Passion. Tous droits réservés.</p>
+                    <p>&copy; 2026 {isAr ? 'زيتوني بيو. زُرع بشغف. جميع الحقوق محفوظة.' : 'Zaitouni Bio. Cultivé avec Passion. Tous droits réservés.'}</p>
                 </div>
             </div>
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 const VideoSection: React.FC = () => {
+    const { isAr } = useLanguage();
     return (
         <section id="tradition" style={{
             position: 'relative',
@@ -53,7 +55,7 @@ const VideoSection: React.FC = () => {
                 >
                     <motion.span
                         initial={{ opacity: 0, letterSpacing: '0.1em' }}
-                        animate={{ opacity: 1, letterSpacing: '0.3em' }}
+                        animate={{ opacity: 1, letterSpacing: isAr ? '0' : '0.3em' }}
                         transition={{ duration: 1.5 }}
                         style={{
                             color: 'var(--primary)',
@@ -65,17 +67,21 @@ const VideoSection: React.FC = () => {
                             textShadow: '0 2px 10px rgba(0,0,0,0.5)'
                         }}
                     >
-                        Pureté & Tradition Marocaine
+                        {isAr ? 'نقاء وتقاليد مغربية أصيلة' : 'Pureté & Tradition Marocaine'}
                     </motion.span>
 
                     <h2 style={{
                         fontFamily: 'var(--font-heading)',
                         fontSize: 'clamp(1.8rem, 8vw, 4.5rem)',
                         marginBottom: 'clamp(1rem, 4vw, 2.5rem)',
-                        lineHeight: 1.1,
+                        lineHeight: 1.15,
                         textShadow: '0 4px 30px rgba(0,0,0,0.6)'
                     }}>
-                        Miel, Huile <br /> & <span style={{ color: 'var(--primary)' }}>Amlou Prestige</span>
+                        {isAr ? (
+                            <>عسل، زيت زيتون <br /> و <span style={{ color: 'var(--primary)' }}>أملو فاخر</span></>
+                        ) : (
+                            <>Miel, Huile <br /> & <span style={{ color: 'var(--primary)' }}>Amlou Prestige</span></>
+                        )}
                     </h2>
 
                     <p style={{
@@ -85,10 +91,12 @@ const VideoSection: React.FC = () => {
                         opacity: 0.9,
                         lineHeight: 1.6,
                         fontWeight: 300,
-                        fontStyle: 'italic',
+                        fontStyle: isAr ? 'normal' : 'italic',
                         textShadow: '0 2px 10px rgba(0,0,0,0.5)'
                     }}>
-                        "Une symphonie de saveurs authentiques, puisée au cœur des terroirs les plus nobles du Maroc pour une expérience gastronomique d'exception."
+                        {isAr
+                            ? '"سمفونية من النكهات الأصيلة، مستخلصة من قلب أجود الأراضي المغربية لتجربة ذوقية استثنائية."'
+                            : '"Une symphonie de saveurs authentiques, puisée au cœur des terroirs les plus nobles du Maroc pour une expérience gastronomique d\'exception."'}
                     </p>
 
                     <motion.div
@@ -97,7 +105,7 @@ const VideoSection: React.FC = () => {
                         transition={{ delay: 0.8, duration: 0.8 }}
                         style={{ marginTop: 'clamp(2rem, 8vw, 4.5rem)', display: 'flex', gap: 'clamp(0.5rem, 2vw, 1.5rem)', justifyContent: 'center', flexWrap: 'wrap' }}
                     >
-                        {['100% Naturel', 'Plat de Luxe', 'Qualité Premium'].map((tag, idx) => (
+                        {(isAr ? ['100% طبيعي', 'جودة فاخرة', 'منتج ممتاز'] : ['100% Naturel', 'Plat de Luxe', 'Qualité Premium']).map((tag, idx) => (
                             <div key={idx} style={{
                                 padding: '0.8rem 2rem',
                                 border: '1px solid rgba(163, 230, 53, 0.6)',

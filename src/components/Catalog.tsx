@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 import ProductCard from './ProductCard';
 import { DEFAULT_CATEGORIES, DEFAULT_PRODUCTS } from '../data/defaultProducts';
+import { useLanguage } from '../context/LanguageContext';
 
 // Fallback images if API doesn't provide them
 import honeyImg from '../assets/cat-honey.jpg';
@@ -25,7 +26,7 @@ interface CatalogProps {
     onOrder: (product: any, weight?: string, quantity?: number) => void;
 }
 const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
-
+    const { isAr } = useLanguage();
     const [searchParams, setSearchParams] = useSearchParams();
     const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
     const [products, setProducts] = useState<any[]>(DEFAULT_PRODUCTS);
@@ -134,7 +135,7 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
                         {categoryId && selectedCategory ? (
                             <>
                                 <h1 className="section-title" style={{ fontSize: '3.5rem', marginBottom: '1rem', color: 'var(--secondary)' }}>
-                                    {selectedCategory.name_fr}
+                                    {isAr ? (selectedCategory.name_ar || selectedCategory.name_fr) : selectedCategory.name_fr}
                                 </h1>
                                 <button
                                     onClick={clearCategory}
@@ -146,14 +147,16 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
                                         marginTop: '1rem'
                                     }}
                                 >
-                                    <ArrowLeft size={16} /> Retour aux collections
+                                    <ArrowLeft size={16} /> {isAr ? 'العودة إلى المجموعات' : 'Retour aux collections'}
                                 </button>
                             </>
                         ) : (
                             <>
                                 <h1 className="section-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: '1.5rem', lineHeight: 1.1 }}>
-                                    Collections Exclusives <br />
-                                    <span style={{ fontSize: '0.8em', color: 'var(--primary)', fontFamily: 'Amiri' }}>مجموعات حصرية</span>
+                                    {isAr ? 'مجموعات حصرية' : 'Collections Exclusives'} <br />
+                                    <span style={{ fontSize: '0.8em', color: 'var(--primary)', fontFamily: 'Amiri' }}>
+                                        {isAr ? 'Zaitouni Bio' : 'مجموعات حصرية'}
+                                    </span>
                                 </h1>
 
                             </>
@@ -276,7 +279,7 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
                                                     textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', fontWeight: 700,
                                                     color: 'var(--primary)'
                                                 }}>
-                                                    Collection
+                                                    {isAr ? 'مجموعة' : 'Collection'}
                                                 </span>
                                             </div>
 
@@ -284,13 +287,13 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
                                                 fontSize: '2.5rem', fontWeight: 800, fontFamily: 'var(--font-heading)',
                                                 marginBottom: '0.5rem', lineHeight: 1
                                             }}>
-                                                {cat.name_fr}
+                                                {isAr ? (cat.name_ar || cat.name_fr) : cat.name_fr}
                                             </h2>
                                             <h3 style={{
                                                 fontSize: '1.8rem', fontFamily: 'Amiri', fontWeight: 600, color: 'rgba(255,255,255,0.9)',
-                                                marginBottom: '1rem', direction: 'rtl'
+                                                marginBottom: '1rem', direction: isAr ? 'ltr' : 'rtl'
                                             }}>
-                                                {cat.name_ar}
+                                                {isAr ? cat.name_fr : cat.name_ar}
                                             </h3>
 
                                             <motion.p
@@ -301,7 +304,7 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
                                                     maxWidth: '90%', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'
                                                 }}
                                             >
-                                                {cat.description_fr}
+                                                {isAr ? (cat.description_ar || cat.description_fr) : cat.description_fr}
                                             </motion.p>
 
                                             <motion.div
@@ -310,9 +313,9 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
                                                 style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginTop: '1.5rem' }}
                                             >
                                                 <span style={{ fontSize: '1rem', fontWeight: 700, borderBottom: '2px solid var(--primary)' }}>
-                                                    Découvrir la gamme
+                                                    {isAr ? 'اكتشف التشكيلة' : 'Découvrir la gamme'}
                                                 </span>
-                                                <ArrowRight size={20} color="var(--primary)" />
+                                                <ArrowRight size={20} color="var(--primary)" style={{ transform: isAr ? 'rotate(180deg)' : 'none' }} />
                                             </motion.div>
                                         </motion.div>
                                     </div>
