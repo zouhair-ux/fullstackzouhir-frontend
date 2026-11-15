@@ -1,10 +1,11 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ShoppingBag, Search, ChevronRight } from 'lucide-react';
 import api, { getImageUrl } from '../api/axios';
 import ZaitounibioLogo from './ZaitounibioLogo';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { DEFAULT_PRODUCTS } from '../data/defaultProducts';
 
 const Navbar: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -16,16 +17,19 @@ const Navbar: React.FC = () => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
-    const [allProducts, setAllProducts] = useState<any[]>([]);
+    const [allProducts, setAllProducts] = useState<any[]>(DEFAULT_PRODUCTS);
 
     useEffect(() => {
         // Fetch products for search
         const fetchProducts = async () => {
             try {
                 const response = await api.get('/products/');
-                setAllProducts(response.data);
+                const data = Array.isArray(response.data) ? response.data : response.data?.results || [];
+                if (data.length > 0) {
+                    setAllProducts(data);
+                }
             } catch (error) {
-                console.error("Error fetching products for search", error);
+                // Keep DEFAULT_PRODUCTS fallback
             }
         };
         fetchProducts();

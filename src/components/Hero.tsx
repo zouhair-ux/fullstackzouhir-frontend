@@ -15,9 +15,10 @@ const Hero: React.FC = () => {
             position: 'relative',
             padding: 'clamp(6rem, 15vh, 10rem) 1rem clamp(3rem, 10vh, 6rem) 1rem',
             overflow: 'hidden',
-            background: `linear-gradient(rgba(18, 42, 22, 0.75), rgba(18, 42, 22, 0.6)), url(${heroBg})`,
+            backgroundImage: `linear-gradient(180deg, rgba(18, 42, 20, 0.62) 0%, rgba(25, 58, 26, 0.45) 50%, rgba(18, 42, 20, 0.72) 100%), url(${heroBg})`,
             backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
         }}>
             {/* Decorative elements */}
             <div style={{
@@ -28,7 +29,7 @@ const Hero: React.FC = () => {
                 height: '300px',
                 background: 'var(--primary)',
                 filter: 'blur(150px)',
-                opacity: 0.2,
+                opacity: 0.25,
                 borderRadius: '50%',
                 zIndex: 0
             }} />
@@ -47,20 +48,21 @@ const Hero: React.FC = () => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '0.8rem',
-                        padding: '0.6rem 1.2rem',
+                        padding: '0.6rem 1.4rem',
                         borderRadius: 'var(--radius-full)',
-                        background: 'rgba(212, 175, 55, 0.25)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(212, 175, 55, 0.3)',
-                        color: 'var(--primary-light)',
+                        background: 'rgba(255, 255, 255, 0.16)',
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(163, 230, 53, 0.55)',
+                        color: '#ffffff',
                         fontSize: '0.85rem',
-                        fontWeight: 600,
+                        fontWeight: 700,
                         textTransform: 'uppercase',
                         letterSpacing: '2px',
-                        marginBottom: 'clamp(1rem, 4vw, 2rem)'
+                        marginBottom: 'clamp(1rem, 4vw, 2rem)',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
                     }}
                 >
-                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)' }} />
+                    <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#a3e635', boxShadow: '0 0 10px #a3e635' }} />
                     Premium, Naturel & 100% Bio
                 </motion.div>
 
@@ -69,20 +71,21 @@ const Hero: React.FC = () => {
                     marginBottom: '1rem',
                     lineHeight: 1,
                     fontWeight: 800,
-                    color: 'white',
+                    color: '#ffffff',
                     letterSpacing: '-0.03em',
-                    textShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                    textShadow: '0 4px 16px rgba(0,0,0,0.35)'
                 }}>
                     L'Essence de la <br />
                     <span style={{
-                        color: 'var(--primary)',
+                        color: '#a3e635',
                         fontStyle: 'italic',
                         position: 'relative',
-                        display: 'inline-block'
+                        display: 'inline-block',
+                        textShadow: '0 4px 20px rgba(85, 139, 47, 0.45)'
                     }}>
                         Nature
                         <svg style={{ position: 'absolute', bottom: '-10px', left: 0, width: '100%', height: '12px' }} viewBox="0 0 100 12" preserveAspectRatio="none">
-                            <path d="M0,10 Q50,0 100,10" fill="none" stroke="var(--primary)" strokeWidth="4" opacity="0.6" />
+                            <path d="M0,10 Q50,0 100,10" fill="none" stroke="#ffffff" strokeWidth="4" opacity="0.85" />
                         </svg>
                     </span>
                     {" "}Pure
@@ -91,12 +94,12 @@ const Hero: React.FC = () => {
                 <p style={{
                     fontSize: 'clamp(1rem, 2.8vw, 1.3rem)',
                     marginBottom: 'clamp(2rem, 8vw, 3.5rem)',
-                    color: 'rgba(255,255,255,0.95)',
+                    color: 'rgba(255,255,255,0.96)',
                     maxWidth: '800px',
                     margin: '0 auto clamp(2rem, 8vw, 3.5rem) auto',
-                    fontWeight: 400,
+                    fontWeight: 500,
                     lineHeight: 1.6,
-                    textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                    textShadow: '0 2px 8px rgba(0,0,0,0.35)'
                 }}>
                     Découvrez une sélection d'exception de miel pur, huiles et cosmétiques bio,
                     récoltés avec respect au cœur des terroirs les plus préservés.
@@ -104,26 +107,46 @@ const Hero: React.FC = () => {
 
                 <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                     <motion.div
-                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileHover={{ scale: 1.03, y: -2 }}
                         whileTap={{ scale: 0.98 }}
                     >
                         <Link
                             to="/catalog"
                             className="btn btn-primary"
-                            style={{ padding: '1.2rem 2.5rem', fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', background: 'var(--primary)', color: 'var(--secondary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.8rem' }}
+                            style={{
+                                padding: '1.2rem 2.5rem',
+                                fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
+                                background: 'linear-gradient(135deg, #558b2f 0%, #7cb342 100%)',
+                                color: '#ffffff',
+                                border: '1px solid rgba(255, 255, 255, 0.3)',
+                                boxShadow: '0 10px 25px rgba(85, 139, 47, 0.45)',
+                                textDecoration: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.8rem'
+                            }}
                         >
                             Explorer la boutique
                             <ArrowRight size={22} />
                         </Link>
                     </motion.div>
                     <motion.div
-                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileHover={{ scale: 1.03, y: -2 }}
                         whileTap={{ scale: 0.98 }}
                     >
                         <Link
                             to="/about#notre-histoire"
                             className="btn btn-outline"
-                            style={{ padding: '1.2rem 2.5rem', fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', color: 'white', borderColor: 'white', textDecoration: 'none', display: 'inline-block' }}
+                            style={{
+                                padding: '1.2rem 2.5rem',
+                                fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
+                                background: 'rgba(255, 255, 255, 0.14)',
+                                backdropFilter: 'blur(8px)',
+                                color: '#ffffff',
+                                borderColor: '#ffffff',
+                                textDecoration: 'none',
+                                display: 'inline-block'
+                            }}
                         >
                             Notre savoir-faire
                         </Link>

@@ -48,8 +48,8 @@ const TrustBadges: React.FC = () => {
                                 textAlign: 'center',
                                 padding: 'clamp(1.5rem, 5vw, 2.5rem) clamp(1rem, 4vw, 2rem)',
                                 borderRadius: '24px',
-                                background: 'linear-gradient(145deg, #ffffff, #f8fafc)',
-                                border: '1px solid rgba(212, 175, 55, 0.1)',
+                                background: 'linear-gradient(145deg, #ffffff, #f8fbf4)',
+                                border: '1px solid rgba(124, 179, 66, 0.18)',
                                 boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
                                 transition: 'all 0.3s'
                             }}
@@ -59,7 +59,7 @@ const TrustBadges: React.FC = () => {
                                 width: '70px',
                                 height: '70px',
                                 borderRadius: '20px',
-                                background: 'rgba(212, 175, 55, 0.1)',
+                                background: 'rgba(124, 179, 66, 0.12)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ShoppingCart, Zap, Star, ChevronRight, Minus, Plus } from 'lucide-react';
 import api, { getImageUrl } from '../api/axios';
 import { useCart } from '../context/CartContext';
+import { DEFAULT_PRODUCTS } from '../data/defaultProducts';
 
 interface ProductDetailsProps {
     onOrder: (product: any, weight?: string, quantity?: number) => void;
@@ -13,19 +14,27 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onOrder }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
-    const [product, setProduct] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+    const [product, setProduct] = useState<any>(() => DEFAULT_PRODUCTS.find(p => String(p.id) === String(id)) || null);
+    const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'fr' | 'ar'>('fr');
     const [quantity, setQuantity] = useState(1);
     const [isImageOpen, setIsImageOpen] = useState(false);
 
     useEffect(() => {
+        const fallback = DEFAULT_PRODUCTS.find(p => String(p.id) === String(id)) || null;
+        if (fallback) {
+            setProduct(fallback);
+        }
         const fetchProduct = async () => {
             try {
                 const response = await api.get(`/products/${id}/`);
-                setProduct(response.data);
+                if (response.data) {
+                    setProduct(response.data);
+                }
             } catch (error) {
-                console.error('Error fetching product:', error);
+                if (fallback) {
+                    setProduct(fallback);
+                }
             } finally {
                 setLoading(false);
             }

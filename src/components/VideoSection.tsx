@@ -100,13 +100,13 @@ const VideoSection: React.FC = () => {
                         {['100% Naturel', 'Plat de Luxe', 'Qualité Premium'].map((tag, idx) => (
                             <div key={idx} style={{
                                 padding: '0.8rem 2rem',
-                                border: '1px solid var(--primary)',
+                                border: '1px solid rgba(163, 230, 53, 0.6)',
                                 borderRadius: 'var(--radius-full)',
-                                background: 'rgba(212, 175, 55, 0.1)',
+                                background: 'rgba(255, 255, 255, 0.14)',
                                 backdropFilter: 'blur(15px)',
                                 fontSize: '0.95rem',
                                 fontWeight: 600,
-                                color: 'var(--primary)',
+                                color: '#ffffff',
                                 textTransform: 'uppercase',
                                 boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
                             }}>

@@ -104,7 +104,7 @@ const Footer: React.FC = () => {
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.7 }}>
                                 <Phone size={20} className="text-primary" />
-                                <span>+212 638-766104</span>
+                                <span>+212 674-434896</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.7 }}>
                                 <MapPin size={20} className="text-primary" />
@@ -120,7 +120,7 @@ const Footer: React.FC = () => {
             </div>
 
             {/* WhatsApp Float */}
-            <a href="https://wa.me/212638766104?text=Bonjour, je suis intéressé par vos produits naturels."
+            <a href="https://wa.me/212674434896?text=Bonjour, je suis intéressé par vos produits naturels."
                 style={{
                     position: 'fixed',
                     bottom: '2rem',

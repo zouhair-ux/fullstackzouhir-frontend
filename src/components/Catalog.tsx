@@ -4,6 +4,7 @@ import { ArrowRight, Tag, Droplets, Leaf, Thermometer, ArrowLeft } from 'lucide-
 import { useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 import ProductCard from './ProductCard';
+import { DEFAULT_CATEGORIES, DEFAULT_PRODUCTS } from '../data/defaultProducts';
 
 // Fallback images if API doesn't provide them
 import honeyImg from '../assets/cat-honey.jpg';
@@ -26,9 +27,9 @@ interface CatalogProps {
 const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [products, setProducts] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
+    const [products, setProducts] = useState<any[]>(DEFAULT_PRODUCTS);
+    const [loading, setLoading] = useState(false);
     const [productsLoading, setProductsLoading] = useState(false);
 
     const categoryId = searchParams.get('category');
@@ -38,9 +39,11 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
         const fetchCategories = async () => {
             try {
                 const response = await api.get('/categories/');
-                setCategories(response.data);
+                if (Array.isArray(response.data) && response.data.length > 0) {
+                    setCategories(response.data);
+                }
             } catch (error) {
-                console.error('Error fetching categories:', error);
+                console.error('Using default categories:', error);
             } finally {
                 setLoading(false);
             }
@@ -50,18 +53,28 @@ const Catalog: React.FC<CatalogProps> = ({ onOrder }) => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            setProductsLoading(true);
             try {
-                // Fetch filtered by category OR all products
                 const endpoint = categoryId
                     ? `/products/?category=${categoryId}`
                     : '/products/';
 
                 const response = await api.get(endpoint);
                 const data = Array.isArray(response.data) ? response.data : response.data.results || [];
-                setProducts(data);
+                if (data.length > 0) {
+                    setProducts(data);
+                } else {
+                    setProducts(
+                        categoryId
+                            ? DEFAULT_PRODUCTS.filter(p => String(p.category) === categoryId)
+                            : DEFAULT_PRODUCTS
+                    );
+                }
             } catch (error) {
-                console.error('Error fetching products:', error);
+                setProducts(
+                    categoryId
+                        ? DEFAULT_PRODUCTS.filter(p => String(p.category) === categoryId)
+                        : DEFAULT_PRODUCTS
+                );
             } finally {
                 setProductsLoading(false);
             }

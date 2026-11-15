@@ -1,4 +1,4 @@
-﻿import { BrowserRouter as Router, Routes, Route, useSearchParams, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useSearchParams, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import ProductCard from './components/ProductCard'
@@ -24,30 +24,32 @@ import CartDrawer from './components/CartDrawer'
 import ProductDetails from './components/ProductDetails'
 import api from './api/axios'
 import ScrollToTop from './components/ScrollToTop'
+import { DEFAULT_PRODUCTS } from './data/defaultProducts'
 
 const Home = ({ onOrder }: { onOrder: (product: any, weight?: string, quantity?: number) => void }) => {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<any[]>(DEFAULT_PRODUCTS);
+  const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const categoryFilter = searchParams.get('category');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Fetch PROMO products or filtered by category
-        // If category is selected, we filter by category but can still order by views/created_at
         const endpoint = categoryFilter
           ? `/products/?category=${categoryFilter}`
-          : '/products/?is_promo=true'; // Show ONLY promotions on home
+          : '/products/?is_promo=true';
 
         const response = await api.get(endpoint);
-        // If the API returns pagination { results: [] }, handle it.
-        // Assuming current setup returns array directly or valid list.
         const data = Array.isArray(response.data) ? response.data : response.data.results || [];
 
-        setProducts(data);
+        if (data.length > 0) {
+          setProducts(data);
+        } else {
+          setProducts(DEFAULT_PRODUCTS);
+        }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Using default products (API unreachable):', error);
+        setProducts(DEFAULT_PRODUCTS);
       } finally {
         setLoading(false);
       }
@@ -84,7 +86,8 @@ const Home = ({ onOrder }: { onOrder: (product: any, weight?: string, quantity?:
           </div>
           <div className="product-grid-responsive" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(var(--grid-min-width, 280px), 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 500px))',
+            justifyContent: 'center',
             gap: 'var(--grid-gap, 2.5rem)'
           }}>
             {loading ? (
@@ -97,6 +100,7 @@ const Home = ({ onOrder }: { onOrder: (product: any, weight?: string, quantity?:
                   key={product.id}
                   id={product.id}
                   name={product.name_fr}
+                  name_ar={product.name_ar}
                   price={`${product.price} DH`}
                   category={product.category_name || 'Divers'}
                   image={product.image}

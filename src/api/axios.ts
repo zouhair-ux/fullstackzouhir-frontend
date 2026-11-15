@@ -55,7 +55,15 @@ api.interceptors.response.use(
 
 export const getImageUrl = (path: string) => {
     if (!path) return '';
-    if (path.startsWith('http')) return path;
+    if (
+        path.startsWith('http') ||
+        path.startsWith('/src/') ||
+        path.startsWith('/assets/') ||
+        path.startsWith('data:') ||
+        path.startsWith('blob:')
+    ) {
+        return path;
+    }
     const backendRoot = BASE_URL.replace('/api', '');
     return `${backendRoot}${path}`;
 };
